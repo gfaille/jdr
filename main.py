@@ -53,5 +53,3 @@ while continuer:
     pygame.display.flip()
 
 pygame.quit()
-
-# 
