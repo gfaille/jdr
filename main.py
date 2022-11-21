@@ -2,6 +2,20 @@ import pygame
 
 pygame.init()
 
+ # fenêtre et image
+longueur = 1000
+largeur = 1000
+fenetre = pygame.display.set_mode((longueur, largeur))
+fond = pygame.image.load("images/test.png").convert_alpha()
+redimensionner_image = (1500, 1500)
+fond = pygame.transform.scale(fond, redimensionner_image)
+fenetre.blit(fond, (0, 0))
+pygame.display.flip()
+pygame.time.delay(5000)
+import pygame
+
+pygame.init()
+
  # fenêtre, image redimensionner
 longueur = 1000
 largeur = 1000
@@ -20,6 +34,7 @@ continuer = 1
 #Boucle infinie
 while continuer:
     
+
     fenetre.fill((0, 0, 0))
     fenetre.blit(fond, (x, y))
     for event in pygame.event.get() :
