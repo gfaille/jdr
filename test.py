@@ -30,6 +30,19 @@ def dessiner_texte (text, size, background, x, y) :
     fenetre.blit(texte, buton_texte)
     return rect_bouton # retourne les coordonnées x et y du rectangle et sa dimension (largeur, hauteur)
 
+def dessiner_box (cocher, background, x, y , width, height) :
+
+    if cocher == False :
+        # créer un rectangle vide 
+        rect_btn = pygame.draw.rect(fenetre, (background), rect=(x, y, width, height))
+        return rect_btn
+    else :
+        # créer un rectangle qui contient une croix
+        rect_btn = pygame.draw.rect(fenetre, (background), rect=(x, y, width, height))
+        pygame.draw.line(fenetre, (255, 255, 255), start_pos=(rect_btn.topleft), end_pos=(rect_btn.bottomright))
+        pygame.draw.line(fenetre, (255, 255, 255), start_pos=(rect_btn.topright), end_pos=(rect_btn.bottomleft))
+        return rect_btn
+
 def jouer_musique (chemins, volume) :
     """ fonction pour jouer de la musique, charge, puis joue la musique 
 
@@ -71,7 +84,12 @@ x = longueur*0.60 # variable pour positionné le curseur du slider
 volume = 1.0 # le volume du son
 moving = False # variable pour déterminé si on déplace le curseur
 
-jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
+# détermine si une case est vrai (musique, effets)
+musique = True 
+effets = True 
+
+if musique == True :
+    jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
 
 # boucle principal
 while continuer :
@@ -207,9 +225,16 @@ while continuer :
                 btn = slider((longueur*0.30, largeur*0.20), (longueur*0.60, largeur*0.20), (51, 101, 138), x, largeur*0.20)
 
                 # texte et bouton 
+                dessiner_texte("Volumes général", 18, (0, 0, 0), longueur*0.40, largeur*0.10)
                 dessiner_texte("0", 20, (0, 0, 0), longueur*0.305, largeur*0.15)
                 dessiner_texte("100", 20, (0, 0, 0), longueur*0.595, largeur*0.15)
                 bouton_retour = dessiner_texte("retour", 16, (51, 101, 138), longueur*0.75, largeur*0.80)
+                # bouton_musique = dessiner_texte("Oui", 16, (51, 101, 138), longueur*0.30, largeur*0.30)
+                # bouton_effets = dessiner_texte("Oui", 16, (51, 101, 138), longueur*0.38, largeur*0.30)
+                bouton_musique = dessiner_box(musique, (51, 101, 138), longueur*0.30, largeur*0.30, 20, 20)
+                bouton_effets = dessiner_box(effets, (51, 101, 138), longueur*0.38, largeur*0.30, 20, 20)
+                dessiner_texte("Musique", 18, (0, 0, 0), longueur*0.28, largeur*0.27)
+                dessiner_texte("Effets sonnores", 18, (0, 0, 0), longueur*0.34, largeur*0.27)
 
                 for event in pygame.event.get() :
                     if event.type == pygame.KEYDOWN :
@@ -223,6 +248,20 @@ while continuer :
 
                         elif bouton_retour.collidepoint(event.pos) :
                             option_menu = ""
+                        
+                        elif bouton_musique.collidepoint(event.pos) :
+                            
+                            if musique == True :
+                                musique = False
+                            else :
+                                musique = True
+
+                        elif bouton_effets.collidepoint(event.pos) :
+
+                            if effets == True :
+                                effets = False
+                            else :
+                                effets = True
 
                     elif event.type == pygame.MOUSEBUTTONUP :
                         moving = False
@@ -259,7 +298,8 @@ while continuer :
 
                     elif bouton_raccourci.collidepoint(event.pos) :
                         option_menu = "raccourci"
-            jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)           
+            if musique == True :
+                jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)           
         pygame.display.flip() # mise à jour total de l'écran
 
 pygame.quit()
