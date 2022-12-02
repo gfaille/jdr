@@ -31,6 +31,19 @@ def dessiner_texte (text, size, background, x, y) :
     return rect_bouton # retourne les coordonnées x et y du rectangle et sa dimension (largeur, hauteur)
 
 def dessiner_box (cocher, background, x, y , width, height) :
+    """ fonction qui permet de créer des box (ils peuvent être coché)
+
+    Args:
+        cocher (Bool): vérifier si c'est la box est cocher
+        background (int): donne la couleur en RGB
+        x (in): donne la position en x
+        y (int): donne la position en x
+        width (int): donne les dimentions en largeur
+        height (int): donne les dimensions en hauteur
+
+    Returns:
+        rect: retourne le rectangle créer
+    """
 
     if cocher == False :
         # créer un rectangle vide 
