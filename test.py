@@ -1,12 +1,34 @@
+import os
+import configparser
 import pygame
+
+# initialise configparser
+config = configparser.ConfigParser()
 
 # initialisation du module pygame
 pygame.init()
 
+# si le fichier config.ini n'existe pas on le créer 
+if not os.path.isfile("config.ini") :
+    config["affichage"] = {
+        "longueur" : 1280,
+        "largeur" : 720, 
+        "flags" : pygame.SHOWN
+    }
+
+    with open("config.ini", "w") as configfile :
+        config.write(configfile)
+
+# lis le fichier config.ini
+config.read("config.ini")
+
+# recupére et stocke la sections affichage
+display = config["affichage"]
+
 # affichage de la fenêtre pygame en 720p
-longueur = 1280
-largeur = 720
-flags = pygame.SHOWN
+longueur = display.getint("longueur")
+largeur = display.getint("largeur")
+flags = display.getint("flags")
 fenetre = pygame.display.set_mode((longueur, largeur), flags)
 
 horloge = pygame.time.Clock() # créer l'object clock (une horloge)
@@ -102,7 +124,7 @@ musique = True
 effets = True 
 
 if musique == True :
-    jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
+    jouer_musique("assets/son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
 
 # boucle principal
 while continuer :
@@ -181,7 +203,7 @@ while continuer :
                 bouton_resolution_wsxga = dessiner_texte("1680 X 1050", 16, (51, 101, 138), longueur*0.25, largeur*0.70)
                 bouton_resolution_fhd = dessiner_texte("1920 X 1280", 16, (51, 101, 138), longueur*0.25, largeur*0.80)
                 bouton_fullscrenn = dessiner_texte("fullscrenn", 16, (51, 101, 138), longueur*0.45, largeur*0.30)
-                bouton_valide = dessiner_texte("Validé", 16, (51, 101, 138), longueur*0.70, largeur*0.80)
+                bouton_valide = dessiner_texte("Validé", 16, (51, 101, 138), longueur*0.65, largeur*0.80)
                 bouton_retour = dessiner_texte("retour", 16, (51, 101, 138), longueur*0.75, largeur*0.80)
 
                 for event in pygame.event.get() :
@@ -192,38 +214,45 @@ while continuer :
                        
                        # capture les event de la souris dans les options d'affichages
                         if bouton_resolution_ntsc.collidepoint(event.pos) :
-                            L, l = 720, 480
+                            config["affichage"]["longueur"], config["affichage"]["largeur"] = "720", "480"
 
                         elif bouton_resolution_svga.collidepoint(event.pos) :
-                            L, l = 800, 600
+                            config["affichage"]["longueur"], config["affichage"]["largeur"]  = "800", "600"
 
                         elif bouton_resolution_xga.collidepoint(event.pos) :
-                            L, l = 1024, 768
+                            config["affichage"]["longueur"], config["affichage"]["largeur"]  = "1024", "768"
 
                         elif bouton_resolution_hd.collidepoint(event.pos) :
-                            L, l = 1280, 720
+                            config["affichage"]["longueur"], config["affichage"]["largeur"]  = "1280", "720"
 
                         elif bouton_resolution_wsxga.collidepoint(event.pos) :
-                            L, l = 1680, 1050
+                            config["affichage"]["longueur"], config["affichage"]["largeur"]  = "1680", "1050"
 
                         elif bouton_resolution_fhd.collidepoint(event.pos) :
-                            L, l = 1920, 1280
-
-                        elif bouton_valide.collidepoint(event.pos) :
-                            if L and l is not None :
-                                longueur = L
-                                largeur = l
-                                fenetre = pygame.display.set_mode((longueur, largeur), flags)
+                            config["affichage"]["longueur"], config["affichage"]["largeur"]  = "1920", "1280"
 
                         elif bouton_fullscrenn.collidepoint(event.pos) :
                             if is_fullscreen == False :
                                 flags = pygame.FULLSCREEN | pygame.SCALED
-                                fenetre = pygame.display.set_mode((longueur, largeur), flags)
+                                config["affichage"]["flags"] = str(flags)
                                 is_fullscreen = True
                             else :
                                 flags = pygame.SHOWN
-                                fenetre = pygame.display.set_mode((longueur, largeur), flags)
+                                config["affichage"]["flags"] = str(flags)
                                 is_fullscreen = False
+
+                        elif bouton_valide.collidepoint(event.pos) :
+
+                            # on applique les modification
+                            longueur = config.getint("affichage", "longueur")
+                            largeur = config.getint("affichage", "largeur")
+                            flags = config.getint("affichage", "flags")
+                            fenetre = pygame.display.set_mode((longueur, largeur), flags)
+                            
+                            # enregistre les nouvelle valeur dans le .ini
+                            with open("config.ini", "w") as configfile :
+                                config.write(configfile)
+
                         
                         elif bouton_retour.collidepoint(event.pos) :
                             option_menu = ""
@@ -242,8 +271,6 @@ while continuer :
                 dessiner_texte("0", 20, (0, 0, 0), longueur*0.305, largeur*0.15)
                 dessiner_texte("100", 20, (0, 0, 0), longueur*0.595, largeur*0.15)
                 bouton_retour = dessiner_texte("retour", 16, (51, 101, 138), longueur*0.75, largeur*0.80)
-                # bouton_musique = dessiner_texte("Oui", 16, (51, 101, 138), longueur*0.30, largeur*0.30)
-                # bouton_effets = dessiner_texte("Oui", 16, (51, 101, 138), longueur*0.38, largeur*0.30)
                 bouton_musique = dessiner_box(musique, (51, 101, 138), longueur*0.30, largeur*0.30, 20, 20)
                 bouton_effets = dessiner_box(effets, (51, 101, 138), longueur*0.38, largeur*0.30, 20, 20)
                 dessiner_texte("Musique", 18, (0, 0, 0), longueur*0.28, largeur*0.27)
@@ -312,7 +339,7 @@ while continuer :
                     elif bouton_raccourci.collidepoint(event.pos) :
                         option_menu = "raccourci"
             if musique == True :
-                jouer_musique("son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)           
+                jouer_musique("assets/son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)           
         pygame.display.flip() # mise à jour total de l'écran
 
 pygame.quit()
