@@ -34,6 +34,19 @@ fenetre = pygame.display.set_mode((longueur, largeur), flags)
 horloge = pygame.time.Clock() # créer l'object clock (une horloge)
 fps = 60 # sauvegarde les fps
 
+# charge les images
+riku_arret_haut = pygame.image.load("assets\sprites\Riku_arret_haut.png")
+riku_arret_bas = pygame.image.load("assets\sprites\Riku_arret_bas.png")
+riku_arret_gauche = pygame.image.load("assets\sprites\Riku_arret_gauche.png")
+riku_marche_haut_gauche = pygame.image.load("assets\sprites\Riku_marche_haut2.png")
+riku_marche_haut_droite = pygame.image.load("assets\sprites\Riku_marche_haut.png")
+riku_marche_bas_gauche = pygame.image.load("assets\sprites\Riku_marche_bas2.png")
+riku_marche_bas_droite = pygame.image.load("assets\sprites\Riku_marche_bas.png")
+riku_marche_gauche_gauche = pygame.image.load("assets\sprites\Riku_marche_gauche.png")
+riku_marche_gauche_droite = pygame.image.load("assets\sprites\Riku_marche_gauche2.png")
+riku_marche_droite_droite = pygame.transform.flip(riku_marche_gauche_droite, True, False)
+riku_marche_droite_gauche = pygame.transform.flip(riku_marche_gauche_gauche, True, False)
+
 def dessiner_texte (text, size, background, x, y) :
     """ fonction qui permet de dessiné du texte et le centrer dans un arriere plan (il peut être transparant, une couleur unit)
         puis l'affiche dans la fenêtre.
@@ -123,6 +136,12 @@ moving = False # variable pour déterminé si on déplace le curseur
 musique = True 
 effets = True 
 
+# déplacement pour le joueur
+x_riku = longueur*0.5
+y_riku = largeur*0.5
+v_riku = 5
+riku = True
+
 if musique == True :
     jouer_musique("assets/son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
 
@@ -131,8 +150,85 @@ while continuer :
     
    # vérifie si game est sur vrai sinon affiche notre menu
     if game :
-        fenetre.fill((255, 0, 0))
+        pygame.mixer.music.stop()
+        fenetre.fill((0, 0, 0))
 
+        fenetre.blit(riku_arret_haut, (x_riku, y_riku))
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN :     
+                if event.key == pygame.K_ESCAPE :
+                    continuer = False
+
+        # fait avancer riku vers le haut de la fenetre lorsqu'on appuis sur fleche du haut
+        if pygame.key.get_pressed()[pygame.K_UP] :
+
+            # éfface l'ecran
+            fenetre.fill((0, 0, 0))
+
+            pygame.time.delay(150) # on met sur pause durant 150 millisecondes
+            y_riku -= v_riku # on diminue l'axe y par rapport la velocité
+
+            # le changement de sprite (image)
+            if riku == True :
+                fenetre.blit(riku_marche_haut_droite, (x_riku, y_riku))
+                riku = False
+            else :
+                fenetre.blit(riku_marche_haut_gauche, (x_riku, y_riku))
+                riku = True
+        
+        # fait avancer riku vers le bas de la fenetre lorsqu'on appuis sur fleche du bas
+        if pygame.key.get_pressed()[pygame.K_DOWN] :
+
+            # éfface l'ecran
+            fenetre.fill((0, 0, 0))
+
+            pygame.time.delay(150) # on met sur pause durant 150 millisecondes
+            y_riku += v_riku # on diminue l'axe y par rapport la velocité
+
+            # le changement de sprite (image)
+            if riku == True :
+                fenetre.blit(riku_marche_bas_droite, (x_riku, y_riku))
+                riku = False
+            else :
+                fenetre.blit(riku_marche_bas_gauche, (x_riku, y_riku))
+                riku = True
+
+        # fait avancer riku vers la gauche de la fenetre lorsqu'on appuis sur fleche gauche
+        if pygame.key.get_pressed()[pygame.K_LEFT] :
+
+            # éfface l'ecran
+            fenetre.fill((0, 0, 0))
+
+            pygame.time.delay(150) # on met sur pause durant 150 millisecondes
+            x_riku -= v_riku # on diminue l'axe y par rapport la velocité
+
+            # le changement de sprite (image)
+            if riku == True :
+                fenetre.blit(riku_marche_gauche_droite, (x_riku, y_riku))
+                riku = False
+            else :
+                fenetre.blit(riku_marche_gauche_gauche, (x_riku, y_riku))
+                riku = True
+        
+        # fait avancer riku vers la droite de la fenetre lorsqu'on appuis sur fleche droite
+        if pygame.key.get_pressed()[pygame.K_RIGHT] :
+
+            # éfface l'ecran
+            fenetre.fill((0, 0, 0))
+
+            pygame.time.delay(150) # on met sur pause durant 150 millisecondes
+            x_riku += v_riku # on diminue l'axe y par rapport la velocité
+
+            # le changement de sprite (image)
+            if riku == True :
+                fenetre.blit(riku_marche_droite_droite, (x_riku, y_riku))
+                riku = False
+            else :
+                fenetre.blit(riku_marche_droite_gauche, (x_riku, y_riku))
+                riku = True
+
+        pygame.time.Clock().tick(fps) # on fixe le nombre d'image par seconde (evite une téléportation de l'image)
         pygame.display.flip() # mise à jour total de l'écran
     else :
         
