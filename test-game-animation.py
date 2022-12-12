@@ -46,6 +46,10 @@ move_riku_down = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-03-1.p
                 pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-03-6.png"),
                 pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-03-7.png")]
 
+idle_riku = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-01.png"),
+            pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-02.png"),
+            pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-03.png"),
+            pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-04.png")]
 
 x = longueur*0.5
 y = largeur*0.5
@@ -96,6 +100,16 @@ while continuer :
         # évennement pour quitter 
         if event.type == pygame.QUIT :
             continuer = False
+        
+        elif event.type == pygame.KEYUP :
+            if event.key == pygame.K_UP :
+                index = 0
+            elif event.key == pygame.K_LEFT :
+                index = 1
+            elif event.key == pygame.K_DOWN :
+                index = 2
+            elif event.key == pygame.K_RIGHT :
+                index = 3
 
     keys = pygame.key.get_pressed()
 
@@ -117,6 +131,10 @@ while continuer :
         vel += 0.5
         
     deplacer_riku()
+
+    # affiche le joueur inactif
+    if keys[pygame.K_UP] + keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_DOWN] == False :
+        fenetre.blit(idle_riku[index], (x, y))
 
     # mise a jour de l'écran complet
     pygame.display.flip()
