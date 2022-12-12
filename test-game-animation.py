@@ -61,17 +61,21 @@ def deplacer_riku () :
     
     # affiche et changer de sprite selon la touche appuyer
     if keys[pygame.K_UP] :
-        fenetre.blit(move_riku_up[index], (x,y))
-        index = (index + 1) %len(move_riku_up)
+        if index <= len(move_riku_up) :
+            fenetre.blit(move_riku_up[index], (x,y))
+            index = (index + 1) %len(move_riku_up)
     elif keys[pygame.K_LEFT] :
-        fenetre.blit(move_riku_left[index], (x, y))
-        index = (index + 1) %len(move_riku_left)
+        if index <= len(move_riku_left) :
+            fenetre.blit(move_riku_left[index], (x, y))
+            index = (index + 1) %len(move_riku_left)
     elif keys[pygame.K_RIGHT] :
-        fenetre.blit(move_riku_right[index], (x, y))
-        index = (index + 1) %len(move_riku_right)
+        if index <= len(move_riku_right) :
+            fenetre.blit(move_riku_right[index], (x, y))
+            index = (index + 1) %len(move_riku_right)
     elif keys[pygame.K_DOWN] :
-        fenetre.blit(move_riku_down[index], (x, y))
-        index = (index + 1) %len(move_riku_down)
+        if index <= len(move_riku_down) :
+            fenetre.blit(move_riku_down[index], (x, y))
+            index = (index + 1) %len(move_riku_down)
 
 continuer = True
 
