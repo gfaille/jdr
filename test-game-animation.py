@@ -132,9 +132,10 @@ while continuer :
         
     deplacer_riku()
 
-    # affiche le joueur inactif
+    # affiche le joueur inactif et restore vel à 1
     if keys[pygame.K_UP] + keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_DOWN] == False :
         fenetre.blit(idle_riku[index], (x, y))
+        vel = 1
 
     # mise a jour de l'écran complet
     pygame.display.flip()
