@@ -46,6 +46,8 @@ riku_marche_gauche_gauche = pygame.image.load("assets\sprites\Riku_marche_gauche
 riku_marche_gauche_droite = pygame.image.load("assets\sprites\Riku_marche_gauche2.png")
 riku_marche_droite_droite = pygame.transform.flip(riku_marche_gauche_droite, True, False)
 riku_marche_droite_gauche = pygame.transform.flip(riku_marche_gauche_gauche, True, False)
+maison_pf = pygame.image.load("assets\environnement\maison exterieure\petite maison pf.png")
+maison_po = pygame.image.load("assets\environnement\maison exterieure\petite maison po.png")
 
 def dessiner_texte (text, size, background, x, y) :
     """ fonction qui permet de dessiné du texte et le centrer dans un arriere plan (il peut être transparant, une couleur unit)
@@ -137,10 +139,14 @@ musique = True
 effets = True 
 
 # déplacement pour le joueur
-x_riku = longueur*0.5
-y_riku = largeur*0.5
+x_riku = longueur*0.4
+y_riku = largeur*0.8
 v_riku = 5
 riku = True
+
+# maison (porte ouvert ou fermé)
+it = 0
+maison = [maison_pf, maison_po]
 
 if musique == True :
     jouer_musique("assets/son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)
@@ -152,36 +158,52 @@ while continuer :
     if game :
         pygame.mixer.music.stop()
         fenetre.fill((0, 0, 0))
-
-        fenetre.blit(riku_arret_haut, (x_riku, y_riku))
+        
+        m = fenetre.blit(maison[it], (longueur*0.5, largeur*0.1))
+        arret = fenetre.blit(riku_arret_haut, (x_riku, y_riku))
 
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN :     
                 if event.key == pygame.K_ESCAPE :
                     continuer = False
 
-        # fait avancer riku vers le haut de la fenetre lorsqu'on appuis sur fleche du haut
-        if pygame.key.get_pressed()[pygame.K_UP] :
+        # vérifie si le joueur entre en collision avec la maison
+        riku_maison_arret = pygame.Rect.colliderect(riku_arret_haut.get_rect(center=(x_riku, y_riku)), m)
+        riku_haut = pygame.Rect.colliderect(riku_marche_haut_droite.get_rect(center=(x_riku, y_riku)), m)
 
-            # éfface l'ecran
-            fenetre.fill((0, 0, 0))
+        if riku_haut == True :
+            # si on appui sur entré on change l'index de l'affichage de la maison
+            if event.type == pygame.KEYDOWN :
+                if event.key == pygame.K_RETURN :
+                    if riku_maison_arret == True :
+                        it = 1
+        else :
+            # fait avancer riku vers le haut de la fenetre lorsqu'on appuis sur fleche du haut
+            if pygame.key.get_pressed()[pygame.K_UP] :
 
-            pygame.time.delay(150) # on met sur pause durant 150 millisecondes
-            y_riku -= v_riku # on diminue l'axe y par rapport la velocité
+                # éfface l'ecran
+                fenetre.fill((0, 0, 0))
+                m = fenetre.blit(maison[it], (longueur*0.5, largeur*0.1))
 
-            # le changement de sprite (image)
-            if riku == True :
-                fenetre.blit(riku_marche_haut_droite, (x_riku, y_riku))
-                riku = False
-            else :
-                fenetre.blit(riku_marche_haut_gauche, (x_riku, y_riku))
-                riku = True
-        
+                pygame.time.delay(150) # on met sur pause durant 150 millisecondes
+                y_riku -= v_riku # on diminue l'axe y par rapport la velocité
+
+                # le changement de sprite (image)
+                if riku == True :
+                    fenetre.blit(riku_marche_haut_droite, (x_riku, y_riku))
+                    riku = False
+                else :
+                    fenetre.blit(riku_marche_haut_gauche, (x_riku, y_riku))
+                    riku = True
+        # restore la variable it à 0 pour afficher la maison avec la porte ouverte
+        if riku_haut == False and riku_maison_arret == False :
+            it = 0  
         # fait avancer riku vers le bas de la fenetre lorsqu'on appuis sur fleche du bas
         if pygame.key.get_pressed()[pygame.K_DOWN] :
 
             # éfface l'ecran
             fenetre.fill((0, 0, 0))
+            m = fenetre.blit(maison[it], (longueur*0.5, largeur*0.1))
 
             pygame.time.delay(150) # on met sur pause durant 150 millisecondes
             y_riku += v_riku # on diminue l'axe y par rapport la velocité
@@ -199,6 +221,7 @@ while continuer :
 
             # éfface l'ecran
             fenetre.fill((0, 0, 0))
+            m = fenetre.blit(maison[it], (longueur*0.5, largeur*0.1))
 
             pygame.time.delay(150) # on met sur pause durant 150 millisecondes
             x_riku -= v_riku # on diminue l'axe y par rapport la velocité
@@ -216,6 +239,7 @@ while continuer :
 
             # éfface l'ecran
             fenetre.fill((0, 0, 0))
+            m = fenetre.blit(maison[it], (longueur*0.5, largeur*0.1))
 
             pygame.time.delay(150) # on met sur pause durant 150 millisecondes
             x_riku += v_riku # on diminue l'axe y par rapport la velocité
@@ -434,6 +458,7 @@ while continuer :
 
                     elif bouton_raccourci.collidepoint(event.pos) :
                         option_menu = "raccourci"
+                        
             if musique == True :
                 jouer_musique("assets/son/1-01 Dearly Beloved (KINGDOM HEARTS).mp3", volume)           
         pygame.display.flip() # mise à jour total de l'écran
