@@ -51,6 +51,12 @@ idle_riku = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-01.png"),
             pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-03.png"),
             pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-04.png")]
 
+# charge les image pour l'arriere plan
+background = [pygame.image.load("assets\environnement\chemins\sol.png"),
+            pygame.image.load("assets\environnement\chemins\sol.png"),
+            pygame.image.load("assets\environnement\chemins\sol.png"),
+            pygame.image.load("assets\environnement\chemins\sol.png")]
+
 x = longueur*0.5
 y = largeur*0.5
 vel = 1
@@ -81,15 +87,27 @@ def deplacer_riku () :
             fenetre.blit(move_riku_down[index], (x, y))
             index = (index + 1) %len(move_riku_down)
 
+def afficher_background () :
+    """ fonction qui permet d'afficher l'arriere plan 
+        la première boucle for permet de changer des ligne la seconde de changer d'index dans la liste
+        de background, pour obtenir les coordonnée on multipli l'index par sa largeur et la ligne par sa hauteur
+    """
+
+    # affiche l'arriere plan 
+    for l in range(len(background)) :
+        for i in range(len(background)) :
+            fenetre.blit(background[i], (i*320, l*320))
+
 continuer = True
 
 # boucle principal
 while continuer :
+
     # limite le nombre de fps
     horloge.tick(60)
 
     # un petit delais
-    pygame.time.delay(70)
+    pygame.time.delay(50)
 
     # efface l'ecran
     fenetre.fill((0, 0, 0))
@@ -125,11 +143,12 @@ while continuer :
     elif keys[pygame.K_DOWN] :
         y += vel
 
-    if vel > 10 :
+    if vel > 15 :
         vel = 10
     else :
-        vel += 0.5
-        
+        vel += 1
+
+    afficher_background()    
     deplacer_riku()
 
     # affiche le joueur inactif et restore vel à 1
