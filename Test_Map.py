@@ -19,6 +19,9 @@ tmx_data = load_pygame("assets/environnement/test-map.tmx")
 tile_width = tmx_data.tilewidth # largeur de la tilemap
 tile_height = tmx_data.tileheight # hauteur de la tilemap
 
+# récupére l'object joueur du tilemap
+J_riku = tmx_data.get_object_by_name("joueur")
+
 # charge les sprite de Riku (joueur), pour l'animation
 move_riku_up = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-01-1.png"), 
                 pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-01-2.png"), 
@@ -61,7 +64,7 @@ idle_riku = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-01.png"),
             pygame.image.load("assets\sprites\Riku-Sprites\Riku-idle-04.png")]
 
 # variable du jeu
-pos = [0, 0]
+pos = [J_riku.x, J_riku.y]
 index = 0
 
 def deplacer_riku () :
@@ -71,22 +74,23 @@ def deplacer_riku () :
 
     global index
     horloge.tick(30)
+
     # affiche et changer de sprite selon la touche appuyer
     if keys[pygame.K_UP] :
         if index <= len(move_riku_up) :
-            fenetre.blit(move_riku_up[index], (object.x, object.y))
+            fenetre.blit(move_riku_up[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
             index = (index + 1) %len(move_riku_up)
     elif keys[pygame.K_LEFT] :
         if index <= len(move_riku_left) :
-            fenetre.blit(move_riku_left[index], (object.x, object.y))
+            fenetre.blit(move_riku_left[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
             index = (index + 1) %len(move_riku_left)
     elif keys[pygame.K_RIGHT] :
         if index <= len(move_riku_right) :
-            fenetre.blit(move_riku_right[index], (object.x, object.y))
+            fenetre.blit(move_riku_right[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
             index = (index + 1) %len(move_riku_right)
     elif keys[pygame.K_DOWN] :
         if index <= len(move_riku_down) :
-            fenetre.blit(move_riku_down[index], (object.x, object.y))
+            fenetre.blit(move_riku_down[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
             index = (index + 1) %len(move_riku_down)
 
 continuer = True
@@ -106,7 +110,7 @@ while continuer :
         if isinstance(layer, pytmx.TiledTileLayer):
             for x, y, tile in layer.tiles() :
                 if (tile) :
-                    fenetre.blit(tile, [x*tile_width, y*tile_height])
+                    fenetre.blit(tile, [(x*tile_width) - J_riku.x + (longueur*0.5), (y*tile_height) - J_riku.y + (largeur*0.5)])
         
         elif isinstance(layer, pytmx.TiledObjectGroup) :
             for object in layer :
@@ -116,8 +120,7 @@ while continuer :
                     
                     # affiche le joueur inactif si aucune touche pressé
                     if keys[pygame.K_UP] + keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_DOWN] == False :
-                        fenetre.blit(idle_riku[index], (object.x, object.y))
-                    #fenetre.blit(idle_riku[index], (object.x, object.y))
+                        fenetre.blit(idle_riku[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
                     
 
     for event in pygame.event.get() :
@@ -148,8 +151,8 @@ while continuer :
     elif keys[pygame.K_DOWN] :
         pos[1]+=10
     
-    tmx_data.get_object_by_name("joueur").x = pos[0]
-    tmx_data.get_object_by_name("joueur").y = pos[1]
+    J_riku.x = pos[0]
+    J_riku.y = pos[1]
         
     pygame.display.flip()
 
