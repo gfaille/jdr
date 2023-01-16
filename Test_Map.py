@@ -22,6 +22,10 @@ tile_height = tmx_data.tileheight # hauteur de la tilemap
 # récupére l'object joueur du tilemap
 J_riku = tmx_data.get_object_by_name("joueur")
 
+# récupére les calce pour les collisions (mur, props)
+collision = tmx_data.get_layer_by_name("mur")
+tile_list = [] # liste vide qui va contenir les rectangle des les couche de collision
+
 # charge les sprite de Riku (joueur), pour l'animation
 move_riku_up = [pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-01-1.png"), 
                 pygame.image.load("assets\sprites\Riku-Sprites\Riku-run-01-2.png"), 
@@ -93,12 +97,31 @@ def deplacer_riku () :
             fenetre.blit(move_riku_down[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
             index = (index + 1) %len(move_riku_down)
 
+def verifier_collision (player) :
+    """ fonction pour vérifier si il y a une collision entre le joueur et les mur et obstacle 
+
+    Args:
+        player (Rect): rectangle du joueur + position
+
+    Returns:
+        bool: retourne True ou False
+    """
+    check = False
+    
+    # test si il y a une collision entre le joueur et un rectangle de la liste
+    if (player.collidelist(tile_list)) != -1 :
+        check = True
+
+    return check
+
 continuer = True
 
 while continuer :
 
     # fix les fps à 60
     horloge.tick(fps)
+    # efface l'ecran
+    fenetre.fill((0, 0, 0))
     
     keys = pygame.key.get_pressed() # recherche la touche qui est maintenue
 
@@ -115,13 +138,17 @@ while continuer :
         elif isinstance(layer, pytmx.TiledObjectGroup) :
             for object in layer :
                 if (object.name == "joueur") :
+                        
                     # animation du déplacement du joueur (riku)
                     deplacer_riku()
                     
                     # affiche le joueur inactif si aucune touche pressé
                     if keys[pygame.K_UP] + keys[pygame.K_LEFT] + keys[pygame.K_RIGHT] + keys[pygame.K_DOWN] == False :
                         fenetre.blit(idle_riku[index], (object.x - J_riku.x + (longueur*0.5), object.y - J_riku.y + (largeur*0.5)))
-                    
+             
+    for x, y, tile in collision.tiles() :
+        if (tile) :
+            tile_list.append(pygame.Rect([(x*tile_width), (y*tile_height), tile_width, tile_height]))
 
     for event in pygame.event.get() :
 
@@ -142,18 +169,33 @@ while continuer :
     # changer la position selon la touche appuyer            
     if keys[pygame.K_UP] :
         pos[1]-=10
+       
     elif keys[pygame.K_LEFT] :
         pos[0]-=10
-    
+       
     elif keys[pygame.K_RIGHT] :
         pos[0]+=10
-    
+        
     elif keys[pygame.K_DOWN] :
         pos[1]+=10
-    
+
     J_riku.x = pos[0]
     J_riku.y = pos[1]
-        
+
+    # rectangle du joueur
+    playerrect = pygame.Rect([J_riku.x, J_riku.y, J_riku.width+20, J_riku.height+50])
+    
+    # verifie si il y a une collision entre le joueur et les diver object de liste 
+    if verifier_collision(playerrect) : 
+        # J_riku.x = pos_precedx
+        # J_riku.y = pos_precedy
+        # print(pos)
+        pos[0] = pos_precedx
+        pos[1] = pos_precedy
+    else : 
+        pos_precedx = pos[0]
+        pos_precedy = pos[1]
+     
     pygame.display.flip()
 
 pygame.quit()
