@@ -41,3 +41,7 @@ def creer_fichier_config () :
         "sauvegarde rapide" : pygame.K_F5,
         "chargement rapide" : pygame.K_F9,
     }
+
+    # écrit dans le fichier config.ini 
+    with open("config.ini", "w") as configfile :
+        config.write(configfile)
