@@ -67,3 +67,7 @@ def mise_a_jour (section, cle, valeur) :
     """
 
     config[section][cle] = valeur
+
+    # écrit dans le fichier config.ini 
+    with open("config.ini", "w") as configfile :
+        config.write(configfile)
