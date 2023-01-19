@@ -56,3 +56,14 @@ def lire_fichier_config () :
     command = config["commande"]
 
     return display, sound, game, command
+
+def mise_a_jour (section, cle, valeur) :
+    """ fonction qui mes a jour une valeur par rapport a sa section et sa clé (fonctionne de la même manière qu'un dictionnaire)
+
+    Args:
+        section (string): on donne la section que l'on veut séléctionné 
+        cle (string): on donne la clé que l'on veut modifié sa valeur 
+        valeur (string / int): on donne sa nouvelle valeur associé à sa clé
+    """
+
+    config[section][cle] = valeur
