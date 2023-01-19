@@ -45,3 +45,14 @@ def creer_fichier_config () :
     # écrit dans le fichier config.ini 
     with open("config.ini", "w") as configfile :
         config.write(configfile)
+
+def lire_fichier_config () :
+
+    config.read("config.ini")
+
+    display = config["affichage"]
+    sound = config["son"]
+    game = config["jeu"]
+    command = config["commande"]
+
+    return display, sound, game, command
