@@ -46,16 +46,21 @@ def creer_fichier_config () :
     with open("config.ini", "w") as configfile :
         config.write(configfile)
 
-def lire_fichier_config () :
+def lire_fichier_config (section) :
+    """ lis le la section demandé dans le fichier config.ini
+
+    Args:
+        section (string): donne la section 
+
+    Returns:
+        dictionnaire: renvoi la section (clé : valeur)
+    """
 
     config.read("config.ini")
 
-    display = config["affichage"]
-    sound = config["son"]
-    game = config["jeu"]
-    command = config["commande"]
+    read = config[section]
 
-    return display, sound, game, command
+    return read
 
 def mise_a_jour (section, cle, valeur) :
     """ fonction qui mes a jour une valeur par rapport a sa section et sa clé (fonctionne de la même manière qu'un dictionnaire)
