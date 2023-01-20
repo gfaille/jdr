@@ -20,3 +20,22 @@ flags = display.getint("flags")
 vsinc = display.getint("vsinc")
 
 fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche la fenetre et la stocke en tant que surface
+
+continuer = True
+
+while continuer :
+
+    # capture les événnement 
+    for event in pygame.event.get() :
+        # quitte si on clique sur la croix rouge de la fenêtre
+        if event.type == pygame.QUIT :
+            continuer = False
+
+        # capture les événnement de type keydown (touche appuyé)
+        if event.type == pygame.KEYDOWN :
+            # quitte si alt + f4 sont appuyé
+            if event.key == pygame.K_LALT and event.key == pygame.K_F4 :
+                continuer = False
+                
+# arrêt de pygame complet et correctement (évite le crash)
+pygame.quit()
