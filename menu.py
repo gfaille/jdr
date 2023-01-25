@@ -40,6 +40,22 @@ def dessiner_texte (text, size, background, x, y) :
 
     return rect_bouton # retourne les coordonnées x et y du rectangle et sa dimension (largeur, hauteur)
 
+def gerer_collision_souri (list_rect) :
+    """ fonction qui vérifie si il y a collision entre la souris et la liste des rectangle 
+        si il y a collision on affiche l'image du bouton
+
+    Args:
+        list_rect (liste): liste qui contien les rectangle 
+    """
+
+    # position de la souris 
+    mouse_pos = pygame.mouse.get_pos()
+
+    # parcour la liste des rectangle par l'index pour vérifier la collision entre un rectangle et la souris (le pointeur)
+    for i in range(len(list_rect)) :
+        if list_rect[i].collidepoint(mouse_pos) :
+            fenetre.blit(img[0], list_rect[i]) # affiche l'image a la position du texte
+
 def afficher_menu_principale () :
         
     # éfface la fenêtre (le fond devient noir)
@@ -50,9 +66,18 @@ def afficher_menu_principale () :
 
     # affcihe le titre et les bouton
     #dessiner_texte("JDR Kingdom Heart", 24, (0, 0, 0), longueur*0.5, largeur*0.2)
-    bouton_continuer = dessiner_texte("continuer", 16, (0, 0, 0), longueur*0.2, largeur*0.2)
-    bouton_nouveau = dessiner_texte("nouvelle parti", 16, (0, 0, 0), longueur*0.2, largeur*0.4)
-    bouton_charger = dessiner_texte("charger parti", 16, (0, 0, 0), longueur*0.2, largeur*0.5)
-    bouton_option = dessiner_texte("options", 16, (0, 0, 0), longueur*0.2, largeur*0.6)
-    bouton_quitter = dessiner_texte("quitter", 16, (0, 0, 0), longueur*0.2, largeur*0.7)
+    bouton_continuer = dessiner_texte("continuer", 16, (0, 0, 0), longueur*0.1, largeur*0.8)
+    bouton_nouveau = dessiner_texte("nouvelle", 16, (0, 0, 0), (bouton_continuer.x + bouton_continuer.width) * 1.2, largeur*0.8)
+    bouton_charger = dessiner_texte("charger", 16, (0, 0, 0), (bouton_nouveau.x + bouton_nouveau.width) * 1.2, largeur*0.8)
+    bouton_option = dessiner_texte("options", 16, (0, 0, 0), (bouton_charger.x + bouton_charger.width) * 1.7, largeur*0.8)
+    bouton_quitter = dessiner_texte("quitter", 16, (0, 0, 0), (bouton_option.x + bouton_option.width) * 1.2, largeur*0.8)
 
+    # liste des bouton 
+    list_btn = [bouton_continuer, 
+                bouton_nouveau, 
+                bouton_charger, 
+                bouton_option, 
+                bouton_quitter]
+
+    # vérifi si il y a collision avec la souris
+    gerer_collision_souri(list_btn)
