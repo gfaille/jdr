@@ -1,6 +1,7 @@
 import os
 import pygame
 import crud
+import menu
 
 # créer le fichier config.ini si il n'existe pas dans le dossier
 if not os.path.isfile("config.ini") :
@@ -9,19 +10,8 @@ if not os.path.isfile("config.ini") :
 # initialise pygame
 pygame.init()
 
-# création de la fenêtre du jeu
-display = crud.lire_fichier_config("affichage") # lis la section affichage 
-
-# lis est stocke les valeur des clé de la section affichage
-# pour obtenir la longueur et largeur de la fenetre puis le flags pour le mode de l'écran et la synchronisation verticale
-longueur = display.getint("longueur")
-largeur = display.getint("largeur")
-flags = display.getint("flags")
-vsinc = display.getint("vsinc")
-
-fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche la fenetre et la stocke en tant que surface
-
-continuer = True
+continuer = True # variable de la boucle principale
+jeu = False # variable pour savoir si on est dans le jeu ou non (default False car on est dans le menu)
 
 while continuer :
 
@@ -36,6 +26,16 @@ while continuer :
             # quitte si alt + f4 sont appuyé
             if event.key == pygame.K_LALT and event.key == pygame.K_F4 :
                 continuer = False
-                
+    
+    # verfie si on est dans le jeu ou le menu
+    if jeu == False :
+        menu.afficher_menu_principale()
+    elif jeu == True : 
+        # appel de la fonction jeu 
+        pass
+
+    # mise a jour de l'écran
+    pygame.display.flip()
+
 # arrêt de pygame complet et correctement (évite le crash)
 pygame.quit()
