@@ -18,8 +18,6 @@ fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche l
 # charge les image 
 fond = pygame.image.load("assets\menu/fond.png").convert() # image pour le fond du menu 
 fond = pygame.transform.scale(fond, (longueur, largeur)) # change la taille de l'image par rapport a la fenêtre
-img = [ pygame.image.load("assets/menu/buttons_large1.png").convert(), 
-        pygame.image.load("assets\menu/buttons_large2.png").convert()] # images pour les bouton 
 
 def dessiner_texte (text, size, background, x, y) :
     """ fonction qui permet de dessiné du texte et le centrer dans un arriere plan (il peut être transparant, une couleur unit)
@@ -41,29 +39,82 @@ def dessiner_texte (text, size, background, x, y) :
     return rect_bouton, texte # retourne les coordonnées x et y du rectangle et sa dimension (largeur, hauteur)
 
 def gerer_collision_souri (list_rect) :
-    """ fonction qui vérifie si il y a collision entre la souris et la liste des rectangle 
-        si il y a collision on affiche l'image du bouton redimensionné 
+    """ gestion de la collision de la souris, lorsqu'on détecte le pointeur de la souris au coordoné du rectangle
+        on affiche l'image qui du bouton.
 
     Args:
-        list_rect (liste): liste qui contien les rectangle 
+        list_rect (liste): liste des rectangle 
     """
+
+    img = [ pygame.image.load("assets/menu/buttons_large1.png").convert(), 
+            pygame.image.load("assets\menu/buttons_large2.png").convert()] # images pour les bouton 
 
     # position de la souris 
     mouse_pos = pygame.mouse.get_pos()
 
-    # parcour la liste des rectangle par l'index pour vérifier la collision entre un rectangle et la souris (le pointeur)
+    # parcour la liste des rectangle par l'index pour vérifier la collision entre un rectangle et la souris (le pointeur),
+    # affiche l'image du bouton redimensionné selon la taille du texte, puis le texte centrer à l'intérieur
     for i in range(len(list_rect)) :
 
         if list_rect[i][0].collidepoint(mouse_pos) :
-
+            
             rect_width = list_rect[i][0].width
             rect_height = list_rect[i][0].height
-            img[0] = pygame.transform.scale(img[0], (rect_width, rect_height))
-            fenetre.blit(img[0], list_rect[i][0]) # affiche l'image a la position du texte
-            print(img[0])
-            # copy de la surface (le texte), puis affiche le texte par dessus l'image
+            if pygame.mouse.get_pressed(num_buttons=3) == (1, 0, 0):
+                img[1] = pygame.transform.scale(img[1], (rect_width*1.30, rect_height*1.50))
+                pos_img = fenetre.blit(img[1], list_rect[i][0])
+            else :
+                img[0] = pygame.transform.scale(img[0], (rect_width*1.30, rect_height*1.50))
+                pos_img = fenetre.blit(img[0], list_rect[i][0])
+
             btn_surf = pygame.Surface.copy(list_rect[i][1])
-            fenetre.blit(btn_surf, list_rect[i][0])
+            centrer_bouton = btn_surf.get_rect(center=pos_img.center)
+
+            fenetre.blit(btn_surf, centrer_bouton)          
+
+def gerer_event_menu (list_rect) :
+
+    # position de la souris 
+    mouse_pos = pygame.mouse.get_pos()
+
+    for i in range(len(list_rect)) :
+        if list_rect[i][0].collidepoint(mouse_pos) :
+
+            for event in pygame.event.get() :
+                if pygame.mouse.get_pressed(num_buttons=3) == (1, 0, 0) :
+                    if event.type == pygame.MOUSEBUTTONDOWN :
+
+                        if list_rect[i][0] == list_rect[0][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                choix = "continuer_jeu"
+
+                        elif list_rect[i][0] == list_rect[1][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                choix = "nouveau"
+
+                        elif list_rect[i][0] == list_rect[2][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                choix = "charger"
+
+                        elif list_rect[i][0] == list_rect[3][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                choix = "options"
+
+                        elif list_rect[i][0] == list_rect[4][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                choix = "quitter"
+                        return choix
+def options () :
+    pass
+
+def charger () :
+    pass
+
+def nouveau () :
+    pass
+
+def continuer_jeu () :
+    pass
 
 def afficher_menu_principale () :
         
@@ -74,12 +125,11 @@ def afficher_menu_principale () :
     fenetre.blit(fond, (0, 0))
 
     # affcihe le titre et les bouton
-    #dessiner_texte("JDR Kingdom Heart", 24, (0, 0, 0), longueur*0.5, largeur*0.2)
-    bouton_continuer = dessiner_texte("continuer", 16, (255, 255, 255, 128), longueur*0.1, largeur*0.8)
-    bouton_nouveau = dessiner_texte("nouvelle", 16, (255, 255, 255, 128), (bouton_continuer[0].x + bouton_continuer[0].width) * 1.2, largeur*0.8)
-    bouton_charger = dessiner_texte("charger", 16, (255, 255, 255, 128), (bouton_nouveau[0].x + bouton_nouveau[0].width) * 1.2, largeur*0.8)
-    bouton_option = dessiner_texte("options", 16, (255, 255, 255, 128), (bouton_charger[0].x + bouton_charger[0].width) * 1.7, largeur*0.8)
-    bouton_quitter = dessiner_texte("quitter", 16, (255, 255, 255, 128), (bouton_option[0].x + bouton_option[0].width) * 1.2, largeur*0.8)
+    bouton_continuer = dessiner_texte("continuer", 18, (255, 255, 255, 128), longueur*0.1, largeur*0.8)
+    bouton_nouveau = dessiner_texte("nouvelle", 18, (255, 255, 255, 128), (bouton_continuer[0].x + bouton_continuer[0].width) * 1.3, largeur*0.8)
+    bouton_charger = dessiner_texte("charger", 18, (255, 255, 255, 128), (bouton_nouveau[0].x + bouton_nouveau[0].width) * 1.2, largeur*0.8)
+    bouton_option = dessiner_texte("options", 18, (255, 255, 255, 128), (bouton_charger[0].x + bouton_charger[0].width) * 1.6, largeur*0.8)
+    bouton_quitter = dessiner_texte("quitter", 18, (255, 255, 255, 128), (bouton_option[0].x + bouton_option[0].width) * 1.2, largeur*0.8)
 
     # liste des bouton 
     list_btn = [bouton_continuer, 
@@ -88,5 +138,8 @@ def afficher_menu_principale () :
                 bouton_option, 
                 bouton_quitter]
 
-    # vérifi si il y a collision avec la souris
+    # vérifie si il y a collision avec la souris
     gerer_collision_souri(list_btn)
+
+    # événement du menu
+    gerer_event_menu(list_btn)
