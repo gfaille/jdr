@@ -3,23 +3,7 @@ import crud
 
 pygame.init()
 
-# création de la fenêtre du jeu
-display = crud.lire_fichier_config("affichage") # lis la section affichage 
-
-# lis est stocke les valeur des clé de la section affichage
-# pour obtenir la longueur et largeur de la fenetre puis le flags pour le mode de l'écran et la synchronisation verticale
-longueur = display.getint("longueur")
-largeur = display.getint("largeur")
-flags = display.getint("flags")
-vsinc = display.getint("vsinc")
-
-fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche la fenetre et la stocke en tant que surface
-
-# charge les image 
-fond = pygame.image.load("assets\menu/fond.png").convert() # image pour le fond du menu 
-fond = pygame.transform.scale(fond, (longueur, largeur)) # change la taille de l'image par rapport a la fenêtre
-
-def dessiner_texte (text, size, background, x, y) :
+def dessiner_texte (surf, text, size, background, x, y) :
     """ fonction qui permet de dessiné du texte et le centrer dans un arriere plan (il peut être transparant, une couleur unit)
         puis l'affiche dans la fenêtre.
 
@@ -33,12 +17,12 @@ def dessiner_texte (text, size, background, x, y) :
 
     police = pygame.font.SysFont("Roboto", size) # configure la police d'écriture
     texte = police.render(text, False, (0, 0, 0)) # ecrit le texte et donne sa couleur
-    rect_bouton = pygame.draw.rect(fenetre, (background), rect=(x, y, texte.get_width(), texte.get_height()))
-    fenetre.blit(texte, rect_bouton) # affiche le texte et son rectangle dans la fenêtre
+    rect_bouton = pygame.draw.rect(surf, (background), rect=(x, y, texte.get_width(), texte.get_height()))
+    surf.blit(texte, rect_bouton) # affiche le texte et son rectangle dans la fenêtre
 
     return rect_bouton, texte # retourne les coordonnées x et y du rectangle et sa dimension (largeur, hauteur)
 
-def gerer_collision_souri (list_rect) :
+def gerer_collision_souri (surf, list_rect) :
     """ gestion de la collision de la souris, lorsqu'on détecte le pointeur de la souris au coordoné du rectangle
         on affiche l'image qui du bouton.
 
@@ -62,15 +46,15 @@ def gerer_collision_souri (list_rect) :
             rect_height = list_rect[i][0].height
             if pygame.mouse.get_pressed(num_buttons=3) == (1, 0, 0):
                 img[1] = pygame.transform.scale(img[1], (rect_width*1.30, rect_height*1.50))
-                pos_img = fenetre.blit(img[1], list_rect[i][0])
+                pos_img = surf.blit(img[1], list_rect[i][0])
             else :
                 img[0] = pygame.transform.scale(img[0], (rect_width*1.30, rect_height*1.50))
-                pos_img = fenetre.blit(img[0], list_rect[i][0])
+                pos_img = surf.blit(img[0], list_rect[i][0])
 
             btn_surf = pygame.Surface.copy(list_rect[i][1])
             centrer_bouton = btn_surf.get_rect(center=pos_img.center)
 
-            fenetre.blit(btn_surf, centrer_bouton)          
+            surf.blit(btn_surf, centrer_bouton)          
 
 def gerer_event_menu (list_rect) :
 
@@ -86,7 +70,7 @@ def gerer_event_menu (list_rect) :
 
                         if list_rect[i][0] == list_rect[0][0] :
                             if list_rect[i][0].collidepoint(mouse_pos) :
-                                choix = "continuer_jeu"
+                                choix = "continuer"
 
                         elif list_rect[i][0] == list_rect[1][0] :
                             if list_rect[i][0].collidepoint(mouse_pos) :
@@ -103,43 +87,5 @@ def gerer_event_menu (list_rect) :
                         elif list_rect[i][0] == list_rect[4][0] :
                             if list_rect[i][0].collidepoint(mouse_pos) :
                                 choix = "quitter"
+                                
                         return choix
-def options () :
-    pass
-
-def charger () :
-    pass
-
-def nouveau () :
-    pass
-
-def continuer_jeu () :
-    pass
-
-def afficher_menu_principale () :
-        
-    # éfface la fenêtre (le fond devient noir)
-    fenetre.fill((0, 0, 0))
-
-    # affiche le fond 
-    fenetre.blit(fond, (0, 0))
-
-    # affcihe le titre et les bouton
-    bouton_continuer = dessiner_texte("continuer", 18, (255, 255, 255, 128), longueur*0.1, largeur*0.8)
-    bouton_nouveau = dessiner_texte("nouvelle", 18, (255, 255, 255, 128), (bouton_continuer[0].x + bouton_continuer[0].width) * 1.3, largeur*0.8)
-    bouton_charger = dessiner_texte("charger", 18, (255, 255, 255, 128), (bouton_nouveau[0].x + bouton_nouveau[0].width) * 1.2, largeur*0.8)
-    bouton_option = dessiner_texte("options", 18, (255, 255, 255, 128), (bouton_charger[0].x + bouton_charger[0].width) * 1.6, largeur*0.8)
-    bouton_quitter = dessiner_texte("quitter", 18, (255, 255, 255, 128), (bouton_option[0].x + bouton_option[0].width) * 1.2, largeur*0.8)
-
-    # liste des bouton 
-    list_btn = [bouton_continuer, 
-                bouton_nouveau, 
-                bouton_charger, 
-                bouton_option, 
-                bouton_quitter]
-
-    # vérifie si il y a collision avec la souris
-    gerer_collision_souri(list_btn)
-
-    # événement du menu
-    gerer_event_menu(list_btn)
