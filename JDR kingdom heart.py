@@ -28,6 +28,13 @@ fond = pygame.transform.scale(fond, (longueur, largeur)) # change la taille de l
 
 continuer = True # variable de la boucle principale
 jeu = False # variable pour savoir si on est dans le jeu ou non (default False car on est dans le menu)
+sous_menu = {
+    "options" : False,
+    "option_jeu" : False,
+    "opttion_affichage" : False,
+    "option_son" : False,
+    "option_raccourci" : False
+}
 
 def afficher_menu_principale () :
         
@@ -60,6 +67,50 @@ def afficher_menu_principale () :
     if event_menu != None :
         return event_menu
 
+def options () :
+
+    # éfface la fenêtre (le fond devient noir)
+    fenetre.fill((255, 255, 255))
+
+    if sous_menu["option_jeu"] == True :
+        option_jeu()
+    elif sous_menu["opttion_affichage"] == True :
+        option_affichage()
+    elif sous_menu["option_son"] == True :
+        option_son()
+    elif sous_menu["option_raccourci"] == True :
+        option_commande()
+    else :
+        
+        menu.dessiner_texte(fenetre, "Options", 24, (255, 255, 255), longueur*0.4, largeur*0.1)
+        bouton_jeu = menu.dessiner_texte(fenetre, "Général", 18, (255, 255, 255), longueur*0.2, largeur*0.2)
+        bouton_affichage = menu.dessiner_texte(fenetre, "Affichage", 18, (255, 255, 255), longueur*0.2, largeur*0.3)
+        bouton_son = menu.dessiner_texte(fenetre, "Son", 18, (255, 255, 255), longueur*0.2, largeur*0.4)
+        bouton_commande = menu.dessiner_texte(fenetre, "Commande", 18, (255, 255, 255), longueur*0.2, largeur*0.5)
+        bouton_retour = menu.dessiner_texte(fenetre, "Retour", 18, (255, 255, 255), longueur*0.2, largeur*0.6)
+
+        list_btn = [bouton_jeu, 
+                    bouton_affichage, 
+                    bouton_son, 
+                    bouton_commande, 
+                    bouton_retour]
+        
+        menu.gerer_collision_souri(fenetre, list_btn)
+
+        event_option = menu.gerer_event_options(list_btn)
+
+        if event_option == "Général" :
+            sous_menu["option_jeu"] = True
+        elif event_option == "Affichage" :
+            sous_menu["opttion_affichage"] = True
+        elif event_option == "Son" :
+            sous_menu["option_son"] = True
+        elif event_option == "Commande" :
+            sous_menu["option_raccourci"] = True
+        elif event_option == "retour" :
+            sous_menu["options"] = False
+
+
 while continuer :
 
     # capture les événnement 
@@ -76,16 +127,21 @@ while continuer :
     
     # verfie si on est dans le jeu ou le menu
     if jeu == False :
-        choix_menu = afficher_menu_principale()
+        if sous_menu["options"] == True :
+            options()
+        else :
+            choix_menu = afficher_menu_principale()
 
-        if choix_menu == 'continuer' :
-            jeu = True
-        elif choix_menu == 'nouveau' :
-            jeu = True
-        elif choix_menu == 'charger' : 
-            jeu = True
-        elif choix_menu == 'quitter' :
-            continuer = False
+            if choix_menu == 'continuer' :
+                jeu = True
+            elif choix_menu == 'nouveau' :
+                jeu = True
+            elif choix_menu == 'charger' : 
+                jeu = True
+            elif choix_menu == 'options' :
+                sous_menu["options"] = True
+            elif choix_menu == 'quitter' :
+                continuer = False
 
     elif jeu == True : 
         # appel de la fonction jeu 
