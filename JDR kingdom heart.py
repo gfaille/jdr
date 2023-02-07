@@ -22,6 +22,13 @@ vsinc = display.getint("vsinc")
 
 fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche la fenetre et la stocke en tant que surface
 
+option_game = crud.lire_fichier_config("jeu")
+
+fps = option_game.getint("fps")
+difficulte = option_game.get("difficulte")
+save_auto = option_game.get("sauvegarde auto")
+niv_auto = option_game.get("niveau auto")
+
 # charge les image 
 fond = pygame.image.load("assets\menu/fond.png").convert() # image pour le fond du menu 
 fond = pygame.transform.scale(fond, (longueur, largeur)) # change la taille de l'image par rapport a la fenêtre
@@ -110,6 +117,43 @@ def options () :
         elif event_option == "retour" :
             sous_menu["options"] = False
 
+def option_jeu() :
+
+    # éfface la fenêtre (le fond devient noir)
+    fenetre.fill((255, 255, 255))
+
+    menu.dessiner_texte(fenetre, "Options affichage", 24, (255, 255, 255), longueur*0.4, largeur*0.1)
+
+    menu.dessiner_texte(fenetre, "difficulté :", 18, (255, 255, 255), longueur*0.2, largeur*0.3)
+    bouton_difficulte = menu.dessiner_texte(fenetre, difficulte, 18, (255, 255, 255), longueur*0.3, largeur*0.3)
+
+    menu.dessiner_texte(fenetre, "fps :", 18, (255, 255, 255), longueur*0.2, largeur*0.4)
+    bouton_fps = menu.dessiner_texte(fenetre, str(fps), 18, (255, 255, 255), longueur*0.3, largeur*0.4)
+
+    menu.dessiner_texte(fenetre, "sauvegarde auto :", 18, (255, 255, 255), longueur*0.2, largeur*0.5)
+    bouton_save = menu.dessiner_texte(fenetre, save_auto, 18, (255, 255, 255), longueur*0.4, largeur*0.5)
+
+    menu.dessiner_texte(fenetre, "augm.niveau auto :", 18, (255, 255, 255), longueur*0.2, largeur*0.6)
+    bouton_niv = menu.dessiner_texte(fenetre, niv_auto, 18, (255, 255, 255), longueur*0.4, largeur*0.6)
+
+    bouton_retour = menu.dessiner_texte(fenetre, "Retour", 18, (255, 255, 255), longueur*0.8, largeur*0.8)
+
+    list_btn = [bouton_difficulte,
+                bouton_fps,
+                bouton_save,
+                bouton_niv,
+                bouton_retour]
+    
+    menu.gerer_collision_souri(fenetre, list_btn)
+
+def option_affichage() :
+    pass
+
+def option_son() :
+    pass
+
+def option_commande() :
+    pass
 
 while continuer :
 
