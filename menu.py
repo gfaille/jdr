@@ -1,4 +1,5 @@
 import pygame
+import crud
 
 def dessiner_texte (surf, text, size, background, x, y) :
     """ fonction qui permet de dessiné du texte et le centrer dans un arriere plan (il peut être transparant, une couleur unit)
@@ -120,3 +121,54 @@ def gerer_event_options (list_rect) :
                                 choix = "retour"
 
                         return choix
+
+def gerer_event_options_general (list_rect, fps, difficulte, save_auto, niv_auto) :
+
+    # position de la souris 
+    mouse_pos = pygame.mouse.get_pos()
+
+    for i in range(len(list_rect)) :
+        if list_rect[i][0].collidepoint(mouse_pos) :
+
+            for event in pygame.event.get() :
+                if pygame.mouse.get_pressed(num_buttons=3) == (1, 0, 0) :
+                    if event.type == pygame.MOUSEBUTTONDOWN :
+
+                        if list_rect[i][0] == list_rect[0][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                               
+                                if difficulte == "facile" :
+                                    crud.mise_a_jour("jeu", "difficulte", "normal")
+                                elif difficulte == "normal" :
+                                    crud.mise_a_jour("jeu", "difficulte", "difficile")
+                                elif difficulte == "difficile" :
+                                    crud.mise_a_jour("jeu", "difficulte", "facile")
+                                    
+                        elif list_rect[i][0] == list_rect[1][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                
+                                if fps == 30 :
+                                    crud.mise_a_jour("jeu", "fps", "60")
+                                else :
+                                    crud.mise_a_jour("jeu", "fps", "30")
+
+                        elif list_rect[i][0] == list_rect[2][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                
+                                if save_auto == "oui" :
+                                    crud.mise_a_jour("jeu", "sauvegarde auto", "non")
+                                else :
+                                    crud.mise_a_jour("jeu", "sauvegarde auto", "oui")
+
+                        elif list_rect[i][0] == list_rect[3][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                
+                                if niv_auto == "non" :
+                                    crud.mise_a_jour("jeu", "niveau auto", "oui")
+                                else :
+                                    crud.mise_a_jour("jeu", "niveau auto", "non")
+
+                        elif list_rect[i][0] == list_rect[4][0] :
+                            if list_rect[i][0].collidepoint(mouse_pos) :
+                                
+                                return True

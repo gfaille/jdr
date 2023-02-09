@@ -10,11 +10,11 @@ if not os.path.isfile("config.ini") :
 # initialise pygame
 pygame.init()
 
-# création de la fenêtre du jeu
-display = crud.lire_fichier_config("affichage") # lis la section affichage 
+# lis les sections du fichier ini
+display = crud.lire_fichier_config("affichage") 
+option_game = crud.lire_fichier_config("jeu")
 
-# lis est stocke les valeur des clé de la section affichage
-# pour obtenir la longueur et largeur de la fenetre puis le flags pour le mode de l'écran et la synchronisation verticale
+# création de la fenêtre du jeu
 longueur = display.getint("longueur")
 largeur = display.getint("largeur")
 flags = display.getint("flags")
@@ -22,19 +22,12 @@ vsinc = display.getint("vsinc")
 
 fenetre = pygame.display.set_mode((longueur, largeur), flags, vsinc) # affiche la fenetre et la stocke en tant que surface
 
-option_game = crud.lire_fichier_config("jeu")
-
-fps = option_game.getint("fps")
-difficulte = option_game.get("difficulte")
-save_auto = option_game.get("sauvegarde auto")
-niv_auto = option_game.get("niveau auto")
-
 # charge les image 
 fond = pygame.image.load("assets\menu/fond.png").convert() # image pour le fond du menu 
 fond = pygame.transform.scale(fond, (longueur, largeur)) # change la taille de l'image par rapport a la fenêtre
 
 continuer = True # variable de la boucle principale
-jeu = False # variable pour savoir si on est dans le jeu ou non (default False car on est dans le menu)
+jeu = False # variable pour savoir si on est dans le jeu ou non (default False)
 sous_menu = {
     "options" : False,
     "option_jeu" : False,
@@ -119,10 +112,15 @@ def options () :
 
 def option_jeu() :
 
+    fps = option_game.getint("fps")
+    difficulte = option_game.get("difficulte")
+    save_auto = option_game.get("sauvegarde auto")
+    niv_auto = option_game.get("niveau auto")
+
     # éfface la fenêtre (le fond devient noir)
     fenetre.fill((255, 255, 255))
 
-    menu.dessiner_texte(fenetre, "Options affichage", 24, (255, 255, 255), longueur*0.4, largeur*0.1)
+    menu.dessiner_texte(fenetre, "Options général", 24, (255, 255, 255), longueur*0.4, largeur*0.1)
 
     menu.dessiner_texte(fenetre, "difficulté :", 18, (255, 255, 255), longueur*0.2, largeur*0.3)
     bouton_difficulte = menu.dessiner_texte(fenetre, difficulte, 18, (255, 255, 255), longueur*0.3, largeur*0.3)
@@ -145,6 +143,9 @@ def option_jeu() :
                 bouton_retour]
     
     menu.gerer_collision_souri(fenetre, list_btn)
+
+    if menu.gerer_event_options_general(list_btn, fps, difficulte, save_auto, niv_auto) :
+        sous_menu["option_jeu"] = False
 
 def option_affichage() :
     pass

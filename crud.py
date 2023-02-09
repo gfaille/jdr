@@ -23,7 +23,7 @@ def creer_fichier_config () :
 
     config["jeu"] = {
         "fps" : 60,
-        "difficulter" : "normal",
+        "difficulte" : "normal",
         "sauvegarde auto" : "oui",
         "niveau auto" : "non" # l'augmentation de niveau sera géré par l'ia
     }
