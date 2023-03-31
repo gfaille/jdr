@@ -33,7 +33,8 @@ sous_menu = {
     "option_jeu" : False,
     "opttion_affichage" : False,
     "option_son" : False,
-    "option_raccourci" : False
+    "option_raccourci" : False,
+    "option_fenetre" : "fenêtré"
 }
 
 def afficher_menu_principale () :
@@ -148,7 +149,34 @@ def option_jeu() :
         sous_menu["option_jeu"] = False
 
 def option_affichage() :
-    pass
+
+    ecran_mode = sous_menu["option_fenetre"]
+
+    # éfface la fenêtre (le fond devient noir)
+    fenetre.fill((255, 255, 255))
+
+    menu.dessiner_texte(fenetre, "Options affichages", 24, (255, 255, 255), longueur*0.4, largeur*0.1)
+
+    menu.dessiner_texte(fenetre, "résolution :", 18, (255, 255, 255), longueur*0.2, largeur*0.3)
+    bouton_resolution = menu.dessiner_texte(fenetre, str(longueur)+ " X " + str(largeur), 18, (255, 255, 255), longueur*0.4, largeur*0.3)
+
+    menu.dessiner_texte(fenetre, "mode écran :", 18, (255, 255, 255), longueur*0.2, largeur*0.4)
+    bouton_ecran = menu.dessiner_texte(fenetre, ecran_mode, 18, (255, 255, 255), longueur*0.4, largeur*0.4)
+
+    menu.dessiner_texte(fenetre, "vsinc :", 18, (255, 255, 255), longueur*0.2, largeur*0.5)
+    if vsinc == 0 :
+        bouton_vsinc = menu.dessiner_texte(fenetre, "désactivé", 18, (255, 255, 255), longueur*0.4, largeur*0.5)
+    else :
+        bouton_vsinc = menu.dessiner_texte(fenetre, "activé", 18, (255, 255, 255), longueur*0.4, largeur*0.5)
+
+    bouton_retour = menu.dessiner_texte(fenetre, "Retour", 18, (255, 255, 255), longueur*0.8, largeur*0.8)
+
+    list_btn = [bouton_resolution,
+                bouton_ecran,
+                bouton_vsinc,
+                bouton_retour]
+
+    menu.gerer_collision_souri(fenetre, list_btn)
 
 def option_son() :
     pass
