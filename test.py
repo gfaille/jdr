@@ -195,9 +195,10 @@ while continuer :
                 else :
                     fenetre.blit(riku_marche_haut_gauche, (x_riku, y_riku))
                     riku = True
-        # restore la variable it à 0 pour afficher la maison avec la porte ouverte
+        # restore la variable it à 0 pour afficher la maison avec la porte fermée
         if riku_haut == False and riku_maison_arret == False :
             it = 0  
+            
         # fait avancer riku vers le bas de la fenetre lorsqu'on appuis sur fleche du bas
         if pygame.key.get_pressed()[pygame.K_DOWN] :
 
