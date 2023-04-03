@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="3">
- <tileset firstgid="1" source="tilesets/0x72_DungeonTilesetII_v1.4.tsx"/>
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="8">
+ <tileset firstgid="1" source="../../../../jdr/assets/map/tilesets/0x72_DungeonTilesetII_v1.4.tsx"/>
  <layer id="1" name="sol" width="50" height="50">
   <data encoding="csv">
 193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,193,
@@ -55,11 +55,6 @@
 130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130,130
 </data>
  </layer>
- <objectgroup id="4" name="object">
-  <object id="1" name="joueur" x="376" y="407">
-   <point/>
-  </object>
- </objectgroup>
  <layer id="2" name="mur" width="50" height="50">
   <data encoding="csv">
 227,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,228,
@@ -114,4 +109,13 @@
 323,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,35,324
 </data>
  </layer>
+ <objectgroup id="4" name="object">
+  <object id="1" name="joueur" x="376" y="407">
+   <point/>
+  </object>
+  <object id="3" name="collision" x="1.5" y="0.25" width="799" height="31"/>
+  <object id="4" name="collision" class="collision" x="795.5" y="31.75" width="3.75" height="767.75"/>
+  <object id="5" name="collision" class="collision" x="1.25" y="780.75" width="794" height="18.75"/>
+  <object id="6" name="collision" class="collision" x="1" y="31.5" width="4.75" height="748.5"/>
+ </objectgroup>
 </map>

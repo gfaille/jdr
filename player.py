@@ -9,6 +9,7 @@ class Joueur (animation.Animation_Sprite) :
         self.image.set_colorkey([0, 0, 0])
         self.rect = self.image.get_rect()
         self.position = [x, y]
+        self.ancien_position = self.position.copy()
         self.vitesse = 3
     
     def mise_a_jour_animation (self, name) :
@@ -28,8 +29,15 @@ class Joueur (animation.Animation_Sprite) :
         }
 
         self.image = self.animation[name]
-        self.image.set_colorkey([0, 0, 0])     
-        
+        self.image.set_colorkey([0, 0, 0])  
+
+    def sauvegarder_position (self) :
+        self.ancien_position = self.position.copy()
+
+    def annuler_deplacement (self) :
+        self.position = self.ancien_position
+        self.rect.topleft = self.position
+   
     def deplacer_gauche (self) :
         self.position[0] -= self.vitesse
     
