@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="107">
- <tileset firstgid="1" source="../../../../jdr/assets/map/tilesets/0x72_DungeonTilesetII_v1.4.tsx"/>
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="7" nextobjectid="107">
+ <tileset firstgid="1" source="tilesets/0x72_DungeonTilesetII_v1.4.tsx"/>
  <layer id="1" name="sol" width="50" height="50">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

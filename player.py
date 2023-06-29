@@ -8,6 +8,7 @@ class Joueur (animation.Animation_Sprite) :
         self.image = self.get_image(24, 0)
         self.image.set_colorkey([0, 0, 0])
         self.rect = self.image.get_rect()
+        self.rect_pied = pygame.Rect(0, 0, self.rect.width * 0.5, self.rect.height * 0.5)
         self.position = [x, y]
         self.ancien_position = self.position.copy()
         self.vitesse = 3
@@ -51,4 +52,5 @@ class Joueur (animation.Animation_Sprite) :
         self.position[1] += self.vitesse
     
     def update(self) :
-        self.rect.topleft = self.position    
+        self.rect.topleft = self.position   
+        self.rect_pied.midbottom = self.rect.midbottom 

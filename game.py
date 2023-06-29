@@ -21,16 +21,16 @@ class Game :
 
         presser = pygame.key.get_pressed()
 
-        if presser[pygame.K_UP] :
+        if presser[pygame.K_o] :
             self.joueur.deplacer_haut()
             self.joueur.mise_a_jour_animation("haut")
-        elif presser[pygame.K_DOWN] :
+        elif presser[pygame.K_l] :
             self.joueur.deplacer_bas()
             self.joueur.mise_a_jour_animation("bas")
-        elif presser[pygame.K_LEFT] :
+        elif presser[pygame.K_k] :
             self.joueur.deplacer_gauche()
             self.joueur.mise_a_jour_animation("gauche")
-        elif presser[pygame.K_RIGHT] :
+        elif presser[pygame.K_m] :
             self.joueur.deplacer_droite()
             self.joueur.mise_a_jour_animation("droite")
     
@@ -65,6 +65,9 @@ class Game :
                     # quitte si alt + f4 sont appuyé
                     if event.key == pygame.K_LALT and event.key == pygame.K_F4 :
                         continuer = False
+
+                    if event.key == pygame.K_i :
+                        self.gestionnaire_cartes.verifier_interaction()
 
 
             pygame.display.flip()
